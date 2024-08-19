@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Metadata:
+  License: Apache-2.0
+Description: "AWS CloudFormation Template for the TTC API Gateway Resources for the Admins"
+Parameters:
+  LambdaFunction1ARN:
+    Description: "Lambda from other stack"
+    Type: String
+  LambdaFunction2ARN:
+    Description: "Lambda from other stack"
+    Type: String
+  RajuApiLambdaRoleARN:
+    Description: "Lambda from other stack"
+    Type: String
+  apiGatewayStageName:
+    Type: "String"
+    AllowedPattern: "^[a-z0-9]+$"
+    Default: "v1"
+Resources:
+  LambdaFuntion1ApiG:
+    Type: "AWS::ApiGateway::RestApi"
+    Properties:
+      Name: "Lambda1Api"
+      Description: "Lambda1 API"
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+  LambdaFuntion1Resource:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      RestApiId: !GetAtt 
+        - LambdaFuntion1ApiG
+        - RootResourceId
+      PathPart: lambda_1
+  LambdaFunction1ApiGetMethod:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      # AuthorizationType: "CUSTOM"
+      # AuthorizerId: !Ref TtcVpayAddClientApiAuthorizerNew
+      HttpMethod: "POST"
+      Integration:
+        IntegrationHttpMethod: "POST"
+        Type: "AWS_PROXY"
+        IntegrationResponses:
+          - StatusCode: 200
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction1Arn}/invocations"
+          - TtcVpayAddClientArn: !Ref LambdaFunction1Arn
+      MethodResponses:
+        - ResponseModels: { "application/json": "Empty" }
+          StatusCode: 200
+      ResourceId: !GetAtt TtcVpayAddClientApiG.RootResourceId
+      RestApiId: !Ref "TtcVpayAddClientApiG"
+  LambdaFunction1ApiOptionMethod:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      AuthorizationType: "NONE"
+      HttpMethod: "OPTIONS"
+      Integration:
+        Type: "MOCK"
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: ""
+        PassthroughBehavior: WHEN_NO_MATCH
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+      MethodResponses:
+        - ResponseModels: { "application/json": "Empty" }
+          StatusCode: 200
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: false
+            method.response.header.Access-Control-Allow-Methods: false
+            method.response.header.Access-Control-Allow-Origin: false
+      ResourceId: !GetAtt LambdaFuntion1ApiG.RootResourceId
+      RestApiId: !Ref "LambdaFuntion1ApiG"
+    DependsOn: LambdaFunction1ApiGetMethod
+  LambdaFuntion1Invoke:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !Ref LambdaFunction1Arn
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${LambdaFuntion1ApiG}/*/POST/"
+  LambdaFunction1Deployment:
+    DependsOn: LambdaFunction1ApiOptionMethod
+    Type: "AWS::ApiGateway::Deployment"
+    Properties:
+      RestApiId: !Ref "LambdaFuntion1ApiG"
+      Description: Deployment  V1.0
+      StageName: !Ref "apiGatewayStageName"
+  

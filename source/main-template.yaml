@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Metadata:
+  License: Apache-2.0
+Description: "AWS CloudFormation Template for the Resources"
+Resources:
+  # CfsBucket:
+  #   Type: AWS::S3::Bucket
+  #   Properties:
+  #     AccelerateConfiguration:
+  #       AccelerationStatus: Suspended
+  #     AccessControl: Private
+  #     BucketName: lambda-cloudfs-bucket-raju
+  #     CorsConfiguration:
+  #       CorsRules:
+  #         - AllowedHeaders:
+  #             - "*"
+  #           AllowedMethods:
+  #             - POST
+  #             - GET
+  #             - PUT
+  #             - HEAD
+  #           AllowedOrigins:
+  #             - "*"
+  #     PublicAccessBlockConfiguration:
+  #       BlockPublicAcls: true
+  #       BlockPublicPolicy: true
+  #       IgnorePublicAcls: true
+  
+  IAMStack:
+    Type: AWS::CloudFormation::Stack
+    # DependsOn: CfsBucket
+    Properties:
+      TemplateURL: "https://lambda-cloudfs-bucket-raju.s3-ap-south-1.amazonaws.com/iam.yml"
+  
+  # DBCogStack:
+  #   DependsOn: IAMStack
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: "https://lambda-cloudfs-bucket-raju.s3-ap-south-1.amazonaws.com/db-cog-stack.yml"
+
+  # S3BucketStack:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: ./bucket.yaml
+
+  LambdaStack:
+    DependsOn: IAMStack
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: "https://lambda-cloudfs-bucket-raju.s3-ap-south-1.amazonaws.com/lambdas.yml"
+      Parameters:
+        RajuLambdaRoleARN: !GetAtt "IAMStack.Outputs.RajuLambdaRoleARN"
+
+  ApiGatewayStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: "https://lambda-cloudfs-bucket-raju.s3-ap-south-1.amazonaws.com/apigateways.yml"
+      Parameters:
+        DomainName: mycv.ltd
+        LambdaFunction1ARN: !GetAtt "LambdaStack.Outputs.LambdaFunction1ARN"
+        LambdaFunction2ARN: !GetAtt "LambdaStack.Outputs.LambdaFunction2ARN"
+        RajuApiLambdaRoleARN: !GetAtt "IAMStack.Outputs.RajuApiLambdaRoleARN"
+  # RDSStack:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: ./rds.yaml
+
+  # DynamoDBStack:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: ./dynamodb.yaml
+
+  # CloudFrontStack:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: ./cloudfront.yaml
+
+# Outputs:
+#   ApiUrl:
+#     Description: "API Gateway URL"
+#     Value: !GetAtt ApiGatewayStack.Outputs.ApiUrl
+#   CloudFrontUrl:
+#     Description: "CloudFront URL"
+#     Value: !GetAtt CloudFrontStack.Outputs.CloudFrontUrl
