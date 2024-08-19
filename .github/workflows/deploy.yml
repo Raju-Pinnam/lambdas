@@ -38,8 +38,7 @@ jobs:
           --s3-bucket lambda-cloudfs-bucket-raju \
           --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
           --region ap-south-1 \
-          --no-fail-on-empty-changeset \
-          --wait
+          --no-fail-on-empty-changeset
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

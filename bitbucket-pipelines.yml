@@ -1,0 +1,56 @@
+pipelines:
+  branches:
+    main: 
+      - step:
+          name: Build and Package
+          deployment: staging
+          artifacts:
+            - source
+          script:
+        
+            # Install AWS CLI if not present in the base image
+            # - apt-get update
+            # - apt-get install -y awscli
+            
+            # # Set AWS credentials and region (Make sure to set these in Bitbucket environment variables for security)
+            # - export AWS_ACCESS_KEY_ID=AKIA6GBMFTHRPTBPCMHX
+            # - export AWS_SECRET_ACCESS_KEY=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
+            # - export AWS_DEFAULT_REGION=ap-south-1
+
+            # # Define the S3 bucket name
+            # - export S3_BUCKET="lambda-cloudfs-bucket-raju"
+
+            # # Check if the bucket exists
+            # - |
+            #   if aws s3 ls "s3://$S3_BUCKET" --region ap-south-1 > /dev/null 2>&1
+            #   then
+            #     echo "Bucket $S3_BUCKET already exists."
+            #   else
+            #     echo "Bucket $S3_BUCKET does not exist. Creating now..."
+            #     if aws s3 mb "s3://$S3_BUCKET" --region ap-south-1; then
+            #       echo "Bucket $S3_BUCKET created successfully."
+            #     else
+            #       echo "Failed to create bucket $S3_BUCKET."
+            #       exit 1
+            #     fi
+            #   fi
+            # Deploy files to S3 bucket
+            # - aws s3 sync source s3://lambda-cloudfs-bucket-raju/ --region ap-south-1
+            - pipe: atlassian/aws-s3-deploy:0.2.4
+              variables:
+                AWS_ACCESS_KEY_ID: "AKIA6GBMFTHRPTBPCMHX"
+                AWS_SECRET_ACCESS_KEY: "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"
+                AWS_DEFAULT_REGION: "ap-south-1"
+                S3_BUCKET: "lambda-cloudfs-bucket-raju"
+                LOCAL_PATH: "source"
+            - pipe: atlassian/aws-cloudformation-deploy:0.20.0
+              variables:
+                AWS_ACCESS_KEY_ID: "AKIA6GBMFTHRPTBPCMHX"
+                AWS_SECRET_ACCESS_KEY: "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"
+                AWS_DEFAULT_REGION: "ap-south-1"
+                STACK_NAME: 'raju-master-cfs'
+                TEMPLATE: 'source/main-template.yaml'
+                S3_BUCKET: "lambda-cloudfs-bucket-raju"
+                LOCAL_PATH: "cfs"
+                CAPABILITIES: ["CAPABILITY_IAM","CAPABILITY_NAMED_IAM","CAPABILITY_AUTO_EXPAND"]
+                WAIT: "true"
