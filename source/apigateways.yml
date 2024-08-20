@@ -26,6 +26,29 @@ Resources:
         Types:
           - REGIONAL
 
+  EmptyAuthorizerFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName: "EmptyAuthorizerFunction"
+      Handler: "index.handler"
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          def handler(event, context):
+            return {
+              'principalId': 'user|a1b2c3d4',
+              'policyDocument': {
+                'Version': '2012-10-17',
+                'Statement': [{
+                  'Action': 'execute-api:Invoke',
+                  'Effect': 'Allow',
+                  'Resource': event['methodArn']
+                }]
+              }
+            }
+      Runtime: python3.10
+      Timeout: 10
+
   EmptyAuthorizer:
     Type: "AWS::ApiGateway::Authorizer"
     Properties:
@@ -33,6 +56,8 @@ Resources:
       RestApiId: !Ref ApiGatewayRestApi
       Type: "TOKEN"
       IdentitySource: "method.request.header.Authorization"
+      AuthorizerUri: !Sub
+        arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${EmptyAuthorizerFunction.Arn}/invocations
       AuthorizerResultTtlInSeconds: 0
   LambdaFunction1Invoke:
     Type: "AWS::Lambda::Permission"
