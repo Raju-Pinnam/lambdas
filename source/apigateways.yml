@@ -17,6 +17,23 @@ Parameters:
     AllowedPattern: "^[a-z0-9]+$"
     Default: "v1"
 Resources:
+  ApiGatewayRestApi:
+    Type: "AWS::ApiGateway::RestApi"
+    Properties:
+      Name: "MyApiGateway"
+      Description: "API Gateway with an empty authorizer"
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+  EmptyAuthorizer:
+    Type: "AWS::ApiGateway::Authorizer"
+    Properties:
+      Name: "EmptyAuthorizer"
+      RestApiId: !Ref ApiGatewayRestApi
+      Type: "TOKEN"
+      IdentitySource: "method.request.header.Authorization"
+      AuthorizerResultTtlInSeconds: 0
   LambdaFunction1Invoke:
     Type: "AWS::Lambda::Permission"
     Properties:
@@ -40,11 +57,12 @@ Resources:
       RestApiId: !Ref LambdaFunction1ApiG
       ParentId: !GetAtt LambdaFunction1ApiG.RootResourceId
       PathPart: lambda_1
-  
+
   LambdaFunction1ApiGetMethod:
     Type: "AWS::ApiGateway::Method"
     Properties:
-      AuthorizationType: "NONE"
+      AuthorizationType: "CUSTOM"
+      AuthorizerId: !Ref EmptyAuthorizer
       HttpMethod: "POST"
       Integration:
         IntegrationHttpMethod: "POST"
