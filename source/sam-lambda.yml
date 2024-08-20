@@ -23,7 +23,7 @@ Globals:
         - subnet-02eecfd020164881b
         - subnet-0106a0d39eddfc465
 
-Resourecs:
+Resources: 
   L1:
     Type: AWS::Serverless::Function
     Properties:
