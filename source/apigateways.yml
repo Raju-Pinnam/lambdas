@@ -44,6 +44,7 @@ Resources:
   LambdaFunction1ApiGetMethod:
     Type: "AWS::ApiGateway::Method"
     Properties:
+      AuthorizationType: "NONE"
       HttpMethod: "POST"
       Integration:
         IntegrationHttpMethod: "POST"
