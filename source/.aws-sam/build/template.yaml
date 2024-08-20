@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  LambdaFunction1:
+    Properties:
+      CodeUri: ../../lambda-cloudfs-bucket-raju/functions/lambda_3.zip
+      Environment:
+        Variables:
+          v1: hee
+          v2: hello
+      Events: {}
+      Handler: lambda_function.lambda_handler
+      MemorySize: 1024
+      Role: RajuLambdaRoleARN
+      Runtime: python3.10
+      Timeout: 300
+    Type: AWS::Serverless::Function
+  LambdaFunction1ApiG:
+    Properties:
+      DefinitionBody: {}
+      Name: Lambda1Api
+      StageName: Prod
+    Type: AWS::Serverless::Api
+  LambdaFunction1ApiGetMethod:
+    Properties:
+      DefinitionBody: {}
+      Name: LambdaFunction1ApiGetMethod
+      StageName: Prod
+    Type: AWS::Serverless::Api
+  LambdaFunction1ApiOptionMethod:
+    Properties:
+      DefinitionBody: {}
+      Name: LambdaFunction1ApiOptionMethod
+      StageName: Prod
+    Type: AWS::Serverless::Api
+  LambdaFunction1Deployment:
+    Properties:
+      DefinitionBody: {}
+      Name: LambdaFunction1Deployment
+      StageName: Prod
+    Type: AWS::Serverless::Api
+  LambdaFunction1Invoke:
+    Properties:
+      DefinitionBody: {}
+      Name: LambdaFunction1Invoke
+      StageName: Prod
+    Type: AWS::Serverless::Api
+  LambdaFunction1Resource:
+    Properties:
+      DefinitionBody: {}
+      Name: LambdaFunction1Resource
+      StageName: Prod
+    Type: AWS::Serverless::Api
+  LambdaFunction2:
+    Properties:
+      CodeUri: ../../lambda-cloudfs-bucket-raju/functions/lambda_4.zip
+      Environment:
+        Variables:
+          v1: hee
+          v2: hello
+      Events: {}
+      Handler: lambda_function.lambda_handler
+      MemorySize: 1024
+      Role: RajuLambdaRoleARN
+      Runtime: python3.10
+      Timeout: 100
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31

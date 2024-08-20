@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for Clear
+
+Globals:
+  Function:
+    Runtime: python3.10
+Resources:
+  SamIamStack:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: sam-iam.yml
+  
+  SamLambdaStack:
+    DependsOn: SamIamStack
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: sam-lambda.yml
+      Parameter:
+        RajuLambdaRoleARN: !GetAtt SamIamStack.Outputs.RajuLambdaRoleARN
+  # SamAPIStack:
+  #   DependsOn: SamLambdaStack
+  #   Type: AWS::Serverless::Application
+  #   Properties:
+  #     Location: sam-api.yml
+  #     ParameterName:
+  #       RajuApiLambdaRoleARN: !GetAtt SamIamStack.Outputs.RajuApiLambdaRoleARN
+  #       L1FunctionArn: !GetAtt SamLambdaStack.Outputs.L1FunctionArn
+
+
+

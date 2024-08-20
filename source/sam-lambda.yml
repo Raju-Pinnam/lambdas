@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Sample SAM Template for lambda functions and apis
+
+Parameters:
+  RajuLambdaRoleARN:
+    Description: "Sam Lambda Role"
+    Type: String
+Globals:
+  Function:
+    Runtime: python3.10
+    Handler: lambda_function.lambda_handler
+    MemorySize: 512
+    Timeout: 30
+    Architectures:
+      - x86_64
+    VpcConfig:
+      SecurityGroupIds:
+        - sg-0b4da5272222e9a41
+      SubnetIds:
+        - subnet-0b4e5aa2ed46c7c6c
+        - subnet-02eecfd020164881b
+        - subnet-0106a0d39eddfc465
+
+Resourecs:
+  L1:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: f1
+      CoudeUri: functions/lambda_1/lambda_function.py
+      Role: !Ref RajuLambdaRoleARN
+Outputs:
+  L1FunctionArn:
+    Value: !GetAtt L1.Arn
+    Description: "L1 Function ARN"
+    Export:
+      Name: "LambdaFunction1ARN::Id" 
+
+
+
+
+
