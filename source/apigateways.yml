@@ -13,19 +13,11 @@ Parameters:
     Description: "Lambda from other stack"
     Type: String
   apiGatewayStageName:
-    Type: "String"
+    Type: String
     AllowedPattern: "^[a-z0-9]+$"
     Default: "v1"
 Resources:
-  # APIDomainName:
-  #   Type: AWS::ApiGateway::DomainName
-  #   Properties:
-  #     DomainName: mycv.ltd
-  #     CertificateArn: arn:aws:acm:region:account-id:certificate/certificate-id
-  #     EndpointConfiguration:
-  #       Types:
-  #         - REGIONAL
-  LambdaFuntion1ApiG:
+  LambdaFunction1ApiG:
     Type: "AWS::ApiGateway::RestApi"
     Properties:
       Name: "Lambda1Api"
@@ -33,19 +25,17 @@ Resources:
       EndpointConfiguration:
         Types:
           - REGIONAL
-  LambdaFuntion1Resource:
+  
+  LambdaFunction1Resource:
     Type: "AWS::ApiGateway::Resource"
     Properties:
-      RestApiId: !Ref LambdaFuntion1ApiG
-      ParentId: !GetAtt 
-        - LambdaFuntion1ApiG
-        - RootResourceId
+      RestApiId: !Ref LambdaFunction1ApiG
+      ParentId: !GetAtt LambdaFunction1ApiG.RootResourceId
       PathPart: lambda_1
+  
   LambdaFunction1ApiGetMethod:
     Type: "AWS::ApiGateway::Method"
     Properties:
-      # AuthorizationType: "CUSTOM"
-      # AuthorizerId: !Ref TtcVpayAddClientApiAuthorizerNew
       HttpMethod: "POST"
       Integration:
         IntegrationHttpMethod: "POST"
@@ -53,13 +43,14 @@ Resources:
         IntegrationResponses:
           - StatusCode: 200
         Uri: !Sub
-          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction1Arn}/invocations"
-          - TtcVpayAddClientArn: !Ref LambdaFunction1Arn
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction1ARN}/invocations"
+          - LambdaFunction1ARN: !Ref LambdaFunction1ARN
       MethodResponses:
         - ResponseModels: { "application/json": "Empty" }
           StatusCode: 200
-      ResourceId: !GetAtt TtcVpayAddClientApiG.RootResourceId
-      RestApiId: !Ref "TtcVpayAddClientApiG"
+      ResourceId: !Ref LambdaFunction1Resource
+      RestApiId: !Ref LambdaFunction1ApiG
+  
   LambdaFunction1ApiOptionMethod:
     Type: "AWS::ApiGateway::Method"
     Properties:
@@ -85,21 +76,22 @@ Resources:
             method.response.header.Access-Control-Allow-Headers: false
             method.response.header.Access-Control-Allow-Methods: false
             method.response.header.Access-Control-Allow-Origin: false
-      ResourceId: !GetAtt LambdaFuntion1ApiG.RootResourceId
-      RestApiId: !Ref "LambdaFuntion1ApiG"
+      ResourceId: !Ref LambdaFunction1Resource
+      RestApiId: !Ref LambdaFunction1ApiG
     DependsOn: LambdaFunction1ApiGetMethod
-  LambdaFuntion1Invoke:
+  
+  LambdaFunction1Invoke:
     Type: "AWS::Lambda::Permission"
     Properties:
       Action: "lambda:InvokeFunction"
-      FunctionName: !Ref LambdaFunction1Arn
+      FunctionName: !Ref LambdaFunction1ARN
       Principal: "apigateway.amazonaws.com"
-      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${LambdaFuntion1ApiG}/*/POST/"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${LambdaFunction1ApiG}/*/POST/lambda_1"
+
   LambdaFunction1Deployment:
     DependsOn: LambdaFunction1ApiOptionMethod
     Type: "AWS::ApiGateway::Deployment"
     Properties:
-      RestApiId: !Ref "LambdaFuntion1ApiG"
+      RestApiId: !Ref LambdaFunction1ApiG
       Description: Deployment  V1.0
-      StageName: !Ref "apiGatewayStageName"
-  
+      StageName: !Ref apiGatewayStageName
