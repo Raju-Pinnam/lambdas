@@ -53,6 +53,7 @@ Resources:
 
   ApiGatewayStack:
     Type: AWS::CloudFormation::Stack
+    DependsOn: LambdaStack
     Properties:
       TemplateURL: "https://lambda-cloudfs-bucket-raju.s3-ap-south-1.amazonaws.com/apigateways.yml"
       Parameters:
