@@ -36,7 +36,8 @@ Resources:
   LambdaFuntion1Resource:
     Type: "AWS::ApiGateway::Resource"
     Properties:
-      RestApiId: !GetAtt 
+      RestApiId: !Ref LambdaFuntion1ApiG
+      ParentId: !GetAtt 
         - LambdaFuntion1ApiG
         - RootResourceId
       PathPart: lambda_1
