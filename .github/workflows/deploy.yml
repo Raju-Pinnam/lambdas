@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -25,53 +24,15 @@ jobs:
 
     - name: Validate SAM Template
       run: |
-        sam validate --template-file source/template.yaml
+        sam validate --template-file source/template.yml
 
     - name: Package SAM Application
       run: |
-        sam package --template-file source/template.yaml --output-template-file packaged.yaml --s3-bucket ${{ secrets.S3_BUCKET }}
+        sam package --template-file source/template.yml --output-template-file source/packaged.yaml --s3-bucket ${{ secrets.S3_BUCKET }}
 
     - name: Deploy SAM Application
       run: |
-        sam deploy --template-file packaged.yaml --stack-name sam-raju-master-cfs --capabilities CAPABILITY_IAM --region ${{ secrets.AWS_REGION }}
+        sam deploy --template-file source/packaged.yaml --stack-name sam-raju-master-cfs --capabilities CAPABILITY_IAM --region ${{ secrets.AWS_REGION }}
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-# jobs:
-#   build_and_deploy:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v3
-
-#     - name: Set up AWS CLI
-#       run: |
-#         sudo apt-get update
-#         sudo apt-get install -y awscli
-#       env:
-#         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         AWS_DEFAULT_REGION: ap-south-1
-
-#     - name: Upload to S3
-#       run: |
-#         aws s3 sync source s3://lambda-cloudfs-bucket-raju/ --region ap-south-1
-#       env:
-#         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         AWS_DEFAULT_REGION: ap-south-1
-
-#     - name: Deploy CloudFormation Stack
-#       run: |
-#         aws cloudformation deploy \
-#           --stack-name raju-master-cfs \
-#           --template-file source/main-template.yaml \
-#           --s3-bucket lambda-cloudfs-bucket-raju \
-#           --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
-#           --region ap-south-1 \
-#           --no-fail-on-empty-changeset
-#       env:
-#         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         AWS_DEFAULT_REGION: ap-south-1
