@@ -17,6 +17,14 @@ Parameters:
     AllowedPattern: "^[a-z0-9]+$"
     Default: "v1"
 Resources:
+  # APIDomainName:
+  #   Type: AWS::ApiGateway::DomainName
+  #   Properties:
+  #     DomainName: mycv.ltd
+  #     CertificateArn: arn:aws:acm:region:account-id:certificate/certificate-id
+  #     EndpointConfiguration:
+  #       Types:
+  #         - REGIONAL
   LambdaFuntion1ApiG:
     Type: "AWS::ApiGateway::RestApi"
     Properties:
