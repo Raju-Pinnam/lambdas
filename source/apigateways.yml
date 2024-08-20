@@ -17,6 +17,14 @@ Parameters:
     AllowedPattern: "^[a-z0-9]+$"
     Default: "v1"
 Resources:
+  LambdaFunction1Invoke:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !Ref LambdaFunction1ARN
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${LambdaFunction1ApiG}/*/POST/lambda_1"
+
   LambdaFunction1ApiG:
     Type: "AWS::ApiGateway::RestApi"
     Properties:
@@ -25,7 +33,7 @@ Resources:
       EndpointConfiguration:
         Types:
           - REGIONAL
-  
+
   LambdaFunction1Resource:
     Type: "AWS::ApiGateway::Resource"
     Properties:
@@ -79,14 +87,6 @@ Resources:
       ResourceId: !Ref LambdaFunction1Resource
       RestApiId: !Ref LambdaFunction1ApiG
     DependsOn: LambdaFunction1ApiGetMethod
-  
-  LambdaFunction1Invoke:
-    Type: "AWS::Lambda::Permission"
-    Properties:
-      Action: "lambda:InvokeFunction"
-      FunctionName: !Ref LambdaFunction1ARN
-      Principal: "apigateway.amazonaws.com"
-      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${LambdaFunction1ApiG}/*/POST/lambda_1"
 
   LambdaFunction1Deployment:
     DependsOn: LambdaFunction1ApiOptionMethod
