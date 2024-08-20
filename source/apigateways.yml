@@ -145,23 +145,23 @@ Resources:
       RestApiId: !Ref LambdaFunction1ApiG
       Description: Deployment  V1.0
       StageName: !Ref apiGatewayStageName
-  DomainName:
-    Type: "AWS::ApiGateway::DomainName"
-    Properties:
-      CertificateArn: !Ref CertificateArn
-      DomainName: "mycv.ltd"
-      EndpointConfiguration:
-        Types: 
-          - REGIONAL
-  F1BasePathMapping:
-    Type: "AWS::ApiGateway::BasePathMapping"
-    Properties:
-      DomainName: !Ref DomainName
-      RestApiId: !Ref LambdaFunction1ApiG
-      Stage: !Ref apiGatewayStageName
-Outputs:
-  ApiEndpoint:
-    Description: "API Gateway endpoint with custom domain"
-    Value: !Sub "https://${DomainName}/lambda_1"
-    Export:
-      Name: ApiEndpoint
+#   DomainName:
+#     Type: "AWS::ApiGateway::DomainName"
+#     Properties:
+#       CertificateArn: !Ref CertificateArn
+#       DomainName: "mycv.ltd"
+#       EndpointConfiguration:
+#         Types: 
+#           - REGIONAL
+#   F1BasePathMapping:
+#     Type: "AWS::ApiGateway::BasePathMapping"
+#     Properties:
+#       DomainName: !Ref DomainName
+#       RestApiId: !Ref LambdaFunction1ApiG
+#       Stage: !Ref apiGatewayStageName
+# Outputs:
+#   ApiEndpoint:
+#     Description: "API Gateway endpoint with custom domain"
+#     Value: !Sub "https://${DomainName}/lambda_1"
+#     Export:
+#       Name: ApiEndpoint
