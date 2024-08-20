@@ -16,6 +16,11 @@ Parameters:
     Type: String
     AllowedPattern: "^[a-z0-9]+$"
     Default: "v1"
+  CertificateArn:
+    Description: "The ARN of the SSL certificate for the custom domain"
+    Type: String
+    Default: "arn:aws:acm:ap-south-1:975050217954:certificate/36a9191a-4eff-4f1e-817c-da62dd5baabe"
+
 Resources:
   # ApiGatewayRestApi:
   #   Type: "AWS::ApiGateway::RestApi"
@@ -140,3 +145,23 @@ Resources:
       RestApiId: !Ref LambdaFunction1ApiG
       Description: Deployment  V1.0
       StageName: !Ref apiGatewayStageName
+  DomainName:
+    Type: "AWS::ApiGateway::DomainName"
+    Properties:
+      CertificateArn: !Ref CertificateArn
+      DomainName: "mycv.ltd"
+      EndpointConfiguration:
+        Types: 
+          - REGIONAL
+  F1BasePathMapping:
+    Type: "AWS::ApiGateway::BasePathMapping"
+    Properties:
+      DomainName: !Ref DomainName
+      RestApiId: !Ref LambdaFunction1ApiG
+      Stage: !Ref apiGatewayStageName
+Outputs:
+  ApiEndpoint:
+    Description: "API Gateway endpoint with custom domain"
+    Value: !Sub "https://${DomainName}/lambda_1"
+    Export:
+      Name: ApiEndpoint
