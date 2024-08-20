@@ -19,7 +19,7 @@ Resources:
     Type: AWS::Serverless::Application
     Properties:
       Location: sam-lambda.yml
-      Parameter:
+      Parameters:
         RajuLambdaRoleARN: !GetAtt SamIamStack.Outputs.RajuLambdaRoleARN
   # SamAPIStack:
   #   DependsOn: SamLambdaStack
