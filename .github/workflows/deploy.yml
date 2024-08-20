@@ -24,11 +24,11 @@ jobs:
 
     - name: Validate SAM Template
       run: |
-        sam validate --template-file source/template.yml
+        sam validate --template-file source/template.yml --region ${{ secrets.AWS_REGION }}
 
     - name: Package SAM Application
       run: |
-        sam package --template-file source/template.yml --output-template-file source/packaged.yaml --s3-bucket ${{ secrets.S3_BUCKET }}
+        sam package --template-file source/template.yml --output-template-file source/packaged.yaml --s3-bucket ${{ secrets.S3_BUCKET }} --region ${{ secrets.AWS_REGION }}
 
     - name: Deploy SAM Application
       run: |
