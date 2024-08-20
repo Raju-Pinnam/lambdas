@@ -28,7 +28,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: f1
-      CoudeUri: functions/lambda_1/
+      CodeUri: functions/lambda_1/
       Role: !Ref RajuLambdaRoleARN
 Outputs:
   L1FunctionArn:
