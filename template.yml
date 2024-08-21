@@ -9,18 +9,18 @@ Globals:
   Function:
     Runtime: python3.10
 Resources:
-  SamIamStack:
-    Type: AWS::Serverless::Application
-    Properties:
-      Location: ./sam-iam.yml
+  # SamIamStack:
+  #   Type: AWS::Serverless::Application
+  #   Properties:
+  #     Location: ./sam-iam.yml
   
   SamLambdaStack:
-    DependsOn: SamIamStack
+    # DependsOn: SamIamStack
     Type: AWS::Serverless::Application
     Properties:
       Location: ./sam-lambda.yml
       Parameters:
-        RajuLambdaRoleARN: !GetAtt SamIamStack.Outputs.RajuLambdaRoleARN
+        RajuLambdaRoleARN: arn:aws:iam::975050217954:role/raju-master-cfs-IAMStack-BEKUT284THW-RajuLambdaRole-016gfcrvACZi
   # SamAPIStack:
   #   DependsOn: SamLambdaStack
   #   Type: AWS::Serverless::Application
