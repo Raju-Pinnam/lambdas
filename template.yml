@@ -9,12 +9,11 @@ Globals:
   Function:
     Runtime: python3.10
 Resources:
-  TtcvpayDataBucket:
+  RajuDataBucket:
     Type: AWS::S3::Bucket
     Properties: 
       AccelerateConfiguration: 
         AccelerationStatus: Suspended
-      AccessControl: Private
       BucketName: raju-client-data
       CorsConfiguration:
         CorsRules:
@@ -35,7 +34,7 @@ Resources:
           RestrictPublicBuckets: true
       # VersioningConfiguration:
       #   Status: Enabled
-  TtcvpayPublicDataUatBucket:
+  RajuPublicDataUatBucket:
     Type: AWS::S3::Bucket
     Properties:
       AccelerateConfiguration:
