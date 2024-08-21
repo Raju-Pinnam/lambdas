@@ -14,6 +14,7 @@ Resources:
     Properties: 
       AccelerateConfiguration: 
         AccelerationStatus: Suspended
+      AccessControl: Private
       BucketName: raju-client-data
       CorsConfiguration:
         CorsRules:
@@ -39,7 +40,7 @@ Resources:
     Properties:
       AccelerateConfiguration:
         AccelerationStatus: Suspended
-      # AccessControl: PublicRead
+      AccessControl: PublicRead
       BucketName: raju-public-data
       CorsConfiguration:
         CorsRules:
