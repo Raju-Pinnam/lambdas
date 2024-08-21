@@ -35,4 +35,4 @@ jobs:
 
     - name: Deploy SAM Application
       run: |
-        sam deploy --template-file packaged-template.yml --stack-name your-stack-name --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+        sam deploy --template-file packaged-template.yml --stack-name sam-raju-master-cfs --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
