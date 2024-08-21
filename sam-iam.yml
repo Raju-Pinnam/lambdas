@@ -189,18 +189,18 @@ Resources:
                   - "lambda:InvokeFunction"
                 Resource: "*"
 
-Outputs:
-  RajuLambdaRoleARN:
-    Value: !GetAtt RajuLambdaRole.Arn
-    Export:
-      Name: "RajuLambdaRoleArn::Id-New"
+# Outputs:
+#   RajuLambdaRoleARN:
+#     Value: !GetAtt RajuLambdaRole.Arn
+#     Export:
+#       Name: "RajuLambdaRoleArn::Id-New"
 
-  RajuapidynamoroleARN:
-    Value: !GetAtt Rajuapidynamorole.Arn
-    Export:
-      Name: "RajuapidynamoroleArn::Id-New"
+#   RajuapidynamoroleARN:
+#     Value: !GetAtt Rajuapidynamorole.Arn
+#     Export:
+#       Name: "RajuapidynamoroleArn::Id-New"
 
-  RajuApiLambdaRoleARN:
-    Value: !GetAtt RajuApiLambdaRole.Arn
-    Export:
-      Name: "RajuApiLambdaRoleArn::Id-New"
+#   RajuApiLambdaRoleARN:
+#     Value: !GetAtt RajuApiLambdaRole.Arn
+#     Export:
+#       Name: "RajuApiLambdaRoleArn::Id-New"

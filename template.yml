@@ -9,16 +9,68 @@ Globals:
   Function:
     Runtime: python3.10
 Resources:
-  # SamIamStack:
-  #   Type: AWS::Serverless::Application
-  #   Properties:
-  #     Location: ./sam-iam.yml
+  TtcvpayDataBucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      AccelerateConfiguration: 
+        AccelerationStatus: Suspended
+      AccessControl: Private
+      BucketName: raju-client-data
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - POST
+              - GET
+              - PUT
+              - HEAD
+              - DELETE
+            AllowedOrigins:
+              - "*"
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+      # VersioningConfiguration:
+      #   Status: Enabled
+  TtcvpayPublicDataUatBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccelerateConfiguration:
+        AccelerationStatus: Suspended
+      AccessControl: PublicRead
+      BucketName: raju-public-data
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - POST
+              - GET
+              - PUT
+              - HEAD
+              - DELETE
+            AllowedOrigins:
+              - "*"
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: False
+          BlockPublicPolicy: False
+          IgnorePublicAcls: False
+          RestrictPublicBuckets: False
+      # VersioningConfiguration:
+      #   Status: Enabled
+  SamIamStack:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: ./sam-iam.yml
   
   SamLambdaStack:
     # DependsOn: SamIamStack
     Type: AWS::Serverless::Application
     Properties:
-      Location: ./sam-lambda.yml
+      Location: sam-lambda.yml
       Parameters:
         RajuLambdaRoleARN: arn:aws:iam::975050217954:role/raju-master-cfs-IAMStack-BEKUT284THW-RajuLambdaRole-016gfcrvACZi
   # SamAPIStack:
@@ -27,7 +79,7 @@ Resources:
   #   Properties:
   #     Location: sam-api.yml
   #     ParameterName:
-  #       RajuApiLambdaRoleARN: !GetAtt SamIamStack.Outputs.RajuApiLambdaRoleARN
+  #       RajuApiLambdaRoleARN: arn:aws:iam::975050217954:role/raju-master-cfs-IAMStack-BEKUT284-RajuApiLambdaRole-vRZEhMrEALc7
   #       L1FunctionArn: !GetAtt SamLambdaStack.Outputs.L1FunctionArn
 
 
