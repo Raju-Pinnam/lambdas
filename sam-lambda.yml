@@ -35,7 +35,7 @@ Outputs:
     Value: !GetAtt L1.Arn
     Description: "L1 Function ARN"
     Export:
-      Name: "LambdaFunction1ARN::Id" 
+      Name: "L1FunctionArn::Id" 
 
 
 
