@@ -60,10 +60,10 @@ Resources:
           RestrictPublicBuckets: False
       # VersioningConfiguration:
       #   Status: Enabled
-  SamIamStack:
-    Type: AWS::Serverless::Application
-    Properties:
-      Location: ./sam-iam.yml
+  # SamIamStack:
+  #   Type: AWS::Serverless::Application
+  #   Properties:
+  #     Location: ./sam-iam.yml
   
   SamLambdaStack:
     # DependsOn: SamIamStack
