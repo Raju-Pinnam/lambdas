@@ -10,7 +10,7 @@ Resources:
     Properties:
       AccelerateConfiguration:
         AccelerationStatus: Suspended
-      BucketName: raju-client-data
+      BucketName: raju-new-client-data
       CorsConfiguration:
         CorsRules:
           - AllowedHeaders:
