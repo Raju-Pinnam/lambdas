@@ -582,7 +582,7 @@ Resources:
   ttcvpayBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: 'raju-webapp-uat'
+      Bucket: 'raju-webapp-dev'
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -590,9 +590,9 @@ Resources:
             Principal:
               AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${ttcvpayCloudFrontOriginIdentity}'
             Action: 's3:GetObject'
-            Resource: 'arn:aws:s3:::raju-webapp-uat/*'
+            Resource: 'arn:aws:s3:::raju-webapp-dev/*'
   ttcvpaycloudfronfunction:
-    DependsOn: ttcvpayBucketPolicy
+    # DependsOn: ttcvpayBucketPolicy
     Type: AWS::CloudFront::Function
     Properties:
       AutoPublish: True
