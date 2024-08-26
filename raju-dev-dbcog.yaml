@@ -211,40 +211,40 @@ Resources:
       UsernameConfiguration:
         CaseSensitive : False
 
-  # TtcvpayUsersPoolOkta:
-  #   Type: 'AWS::Cognito::UserPool'
-  #   Properties:
-  #     UserPoolName: "ttc_vpay_okta"
-  #     AdminCreateUserConfig:
-  #       AllowAdminCreateUserOnly: "True"
-  #     AccountRecoverySetting:
-  #       RecoveryMechanisms:
-  #         - Name: verified_email
-  #           Priority: 1
-  #     Schema:
-  #       - Name: given_name
-  #         AttributeDataType: String
-  #         Mutable: true
-  #         Required: true
-  #       - Name: email
-  #         AttributeDataType: String
-  #         Mutable: true
-  #         Required: true
-  #       - Name: family_name
-  #         AttributeDataType: String
-  #         Mutable: true
-  #         Required: true
-  #     Policies:
-  #       PasswordPolicy:
-  #         MinimumLength: 12
-  #         RequireLowercase: True
-  #         RequireNumbers: True
-  #         RequireUppercase: True
-  #         RequireSymbols: True
-  #     UsernameAttributes: 
-  #       - "email"
-  #     UsernameConfiguration:
-  #       CaseSensitive : False
+  TtcvpayUsersPoolOkta:
+    Type: 'AWS::Cognito::UserPool'
+    Properties:
+      UserPoolName: "ttc_vpay_okta"
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: "True"
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      Schema:
+        - Name: given_name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: email
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: family_name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 12
+          RequireLowercase: True
+          RequireNumbers: True
+          RequireUppercase: True
+          RequireSymbols: True
+      UsernameAttributes: 
+        - "email"
+      UsernameConfiguration:
+        CaseSensitive : False
   # TtcvpayOktausersPoolIdentityProvider:
   #   Type: AWS::Cognito::UserPoolIdentityProvider
   #   Properties:
