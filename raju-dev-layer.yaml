@@ -1,0 +1,115 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Sample SAM Template for lambda layer
+
+Globals:
+  Function:
+    Runtime: python3.10
+
+Resources:
+  Bs4Layer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - python3.8
+        - python3.10
+      ContentUri: "layers/bs4/bs4_v2.zip"
+      Description: bs4 Layer
+      LayerName: bs4
+
+  FileTypeLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleRuntimes: 
+        - python3.8
+        - python3.10
+      ContentUri: layers/filetype/filetype_v2.zip
+      Description: "filetype"
+      LayerName: filetype
+
+  JoseLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleRuntimes: 
+        - python3.8
+        - python3.10
+      ContentUri: "layers/jose/jose_v2.zip"
+      Description: "python-jose layer"
+      LayerName: python-jose
+
+  OktaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - python3.8
+        - python3.10
+      ContentUri: layers/okta/okta_v2.zip
+      Description: "okta"
+      LayerName: okta
+
+  PandasLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - python3.8
+        - python3.10
+      ContentUri: layers/pandas/pandas_v2.zip
+      Description: "pandas"
+      LayerName: pandas
+
+  Psycopg2Layer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - python3.8
+        - python3.10
+      ContentUri: layers/psycopg/psycopg_v2.zip
+      Description: "psycopg2"
+      LayerName: psycopg2
+
+  PytzLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - python3.8
+        - python3.10
+      ContentUri: layers/pytz/pytz_v2.zip
+      Description: "pytz"
+      LayerName: pytz
+
+  RequestsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - python3.8
+        - python3.10
+      ContentUri: layers/requests/requests_v2.zip
+      Description: "requestlayer"
+      LayerName: requestlayer
+
+Outputs:
+  Bs4LayerArn:
+    Description: "Bs4 Layer Arn"
+    Value: !Ref Bs4Layer
+  FileTypeLayerArn:
+    Description: "FileTypeLayer Arn"
+    Value: !Ref FileTypeLayer
+  JoseLayerArn:
+    Description: "JoseLayer Arn"
+    Value: !Ref JoseLayer
+  OktaLayerArn:
+    Description: "OktaLayer Arn"
+    Value: !Ref OktaLayer
+  PandasLayerArn:
+    Description: "PandasLayer Arn"
+    Value: !Ref PandasLayer
+  Psycopg2LayerArn:
+    Description: "Psycopg2Layer Arn"
+    Value: !Ref Psycopg2Layer
+  PytzLayerArn:
+    Description: "PytzLayer Arn"
+    Value: !Ref PytzLayer
+  RequestsLayerArn:
+    Description: "RequestsLayer Arn"
+    Value: !Ref RequestsLayer

@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for Clear
+
+Globals:
+  Function:
+    Runtime: python3.10
+
+Resources:
+
+  TtcvpayCfsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccelerateConfiguration:
+        AccelerationStatus: Suspended
+      # AccessControl: Private
+      BucketName: raju-cloudfs-dev
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - POST
+              - GET
+              - PUT
+              - HEAD
+              - DELETE
+            AllowedOrigins:
+              - "*"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+
+  ttcvpayDBCogBuckStack:
+    DependsOn: TtcvpayCfsBucket
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: raju-dev-dbcog.yaml
+
+  LayerStack:
+    DependsOn: ttcvpayDBCogBuckStack
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: raju-dev-layer.yaml
+
+  # S3Stack:
+  #   Type: AWS::Serverless::Application
+  #   DependsOn: LayerStack
+  #   Properties:
+  #     Location: raju-dev-s3.yaml
+
+  # LambdaAPIStack1:
+  #   Type: AWS::Serverless::Application
+  #   DependsOn: S3Stack
+  #   Properties:
+  #     Location: raju-dev-s3.yaml
+
+

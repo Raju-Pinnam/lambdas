@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Metadata:
+  License: Apache-2.0
+Description: "AWS CloudFormation Template for the S3 Resources"
+
+Resources:
+

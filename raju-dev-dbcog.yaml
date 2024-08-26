@@ -1,0 +1,718 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Metadata:
+  License: Apache-2.0
+Description: "AWS CloudFormation Template for the S3 Resources"
+
+Resources:
+  TtcvpayDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccelerateConfiguration:
+        AccelerationStatus: Suspended
+      BucketName: raju-client-data
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - POST
+              - GET
+              - PUT
+              - HEAD
+              - DELETE
+            AllowedOrigins:
+              - "*"
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+
+  TtcvpayPublicDataDevBucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      AccelerateConfiguration:
+        AccelerationStatus: Suspended
+      BucketName: raju-public-data-dev
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - POST
+              - GET
+              - PUT
+              - HEAD
+              - DELETE
+            AllowedOrigins:
+              - "*"
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: False
+          BlockPublicPolicy: False
+          IgnorePublicAcls: False
+          RestrictPublicBuckets: False
+
+  TtcvpayWebappLandingBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccelerateConfiguration:
+        AccelerationStatus: Suspended
+      BucketName: raju-webapp-landing
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - POST
+              - GET
+              - PUT
+              - HEAD
+              - DELETE
+            AllowedOrigins:
+              - "*"
+            ExposedHeaders:
+              - ETag
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+          # TODO 1 Add notification configuration refer ttc vpay UAT
+          # https://chatgpt.com/c/6b5b6ba4-faad-47af-9513-5f224edae128
+
+  TtcvpayWebappStagingDev:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccelerateConfiguration:
+        AccelerationStatus: Suspended
+      BucketName: raju-webapp-staging-dev
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - POST
+              - GET
+              - PUT
+              - HEAD
+              - DELETE
+            AllowedOrigins:
+              - "*"
+            ExposedHeaders:
+              - ETag
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+
+  CloudStorageSecQuarantine:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccelerateConfiguration:
+        AccelerationStatus: Suspended
+      BucketName: raju-cloudstoragesecquarantine-dev
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - POST
+              - GET
+              - PUT
+              - HEAD
+              - DELETE
+            AllowedOrigins:
+              - "*"
+            ExposedHeaders:
+              - ETag
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+
+  TtcvpayWebAppDevBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccelerateConfiguration:
+        AccelerationStatus: Suspended
+      BucketName: raju-webapp-dev
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - POST
+              - GET
+              - PUT
+              - HEAD
+              - DELETE
+            AllowedOrigins:
+              - "*"
+            ExposedHeaders:
+              - ETag
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+      WebsiteConfiguration:
+        ErrorDocument: index.html
+        IndexDocument: index.html
+
+  # TtcvpayUsersPool:
+  #   Type: 'AWS::Cognito::UserPool'
+  #   Properties:
+  #     UserPoolName: "raju"
+  #     AdminCreateUserConfig:
+  #       AllowAdminCreateUserOnly: "True"
+  #       #TemporaryPasswordValidityDays: "7"
+  #     EmailConfiguration:
+  #       EmailSendingAccount: "DEVELOPER"
+  #       SourceArn: arn:aws:ses:us-west-2:975050217954:identity/ttcvpay-dev@fugetroncorp.com
+  #     AccountRecoverySetting:
+  #       RecoveryMechanisms:
+  #         - Name: verified_email
+  #           Priority: 1
+  #     Schema:
+  #       - Name: given_name
+  #         AttributeDataType: String
+  #         Mutable: true
+  #         Required: true
+  #       - Name: email
+  #         AttributeDataType: String
+  #         Mutable: false
+  #         Required: true
+  #       - Name: family_name
+  #         AttributeDataType: String
+  #         Mutable: true
+  #         Required: true
+  #       - Name: company_name
+  #         AttributeDataType: String
+  #         Mutable: true
+  #       - Name: user_type
+  #         AttributeDataType: String
+  #         Mutable: true
+  #     Policies:
+  #       PasswordPolicy: 
+  #         MinimumLength: 12
+  #         RequireLowercase: True
+  #         RequireNumbers: True
+  #         RequireUppercase: True
+  #         RequireSymbols: True
+  #     UsernameAttributes: 
+  #       - "email"
+  #     UsernameConfiguration:
+  #       CaseSensitive : False
+  #     LambdaConfig:
+  #       CustomMessage: arn:aws:lambda:us-west-2:975050217954:function:ttc_vpay_welcome_email
+  #       PreAuthentication: arn:aws:lambda:us-west-2:975050217954:function:ttc_vpay_lock_unlock_user
+  #       PostAuthentication: arn:aws:lambda:us-west-2:975050217954:function:ttc_vpay_lock_unlock_user
+  # TtcvpayUsersPoolOkta:
+  #   Type: 'AWS::Cognito::UserPool'
+  #   Properties:
+  #     UserPoolName: "ttc_vpay_okta"
+  #     AdminCreateUserConfig:
+  #       AllowAdminCreateUserOnly: "True"
+  #     AccountRecoverySetting:
+  #       RecoveryMechanisms:
+  #         - Name: verified_email
+  #           Priority: 1
+  #     Schema:
+  #       - Name: given_name
+  #         AttributeDataType: String
+  #         Mutable: true
+  #         Required: true
+  #       - Name: email
+  #         AttributeDataType: String
+  #         Mutable: true
+  #         Required: true
+  #       - Name: family_name
+  #         AttributeDataType: String
+  #         Mutable: true
+  #         Required: true
+  #     Policies:
+  #       PasswordPolicy:
+  #         MinimumLength: 12
+  #         RequireLowercase: True
+  #         RequireNumbers: True
+  #         RequireUppercase: True
+  #         RequireSymbols: True
+  #     UsernameAttributes: 
+  #       - "email"
+  #     UsernameConfiguration:
+  #       CaseSensitive : False
+  # TtcvpayOktausersPoolIdentityProvider:
+  #   Type: AWS::Cognito::UserPoolIdentityProvider
+  #   Properties:
+  #     AttributeMapping:
+  #       email: "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+  #       family_name: "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/lastname"
+  #       given_name: "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/firstname"
+  #     ProviderDetails:
+  #       MetadataURL : "https://login.dev.aws.castandcrew.com/app/exkpb82lh7vJdvmPx357/sso/saml/metadata"
+  #       IDPSignout : true
+  #     ProviderName: "Okta"
+  #     ProviderType: "SAML"
+  #     UserPoolId: !Ref TtcvpayUsersPoolOkta
+  # TtcvpayOktausersPoolClient:
+  #   Type: "AWS::Cognito::UserPoolClient"
+  #   Properties:
+  #     ClientName: "ttcvpay"
+  #     GenerateSecret: false
+  #     UserPoolId: !Ref TtcvpayUsersPoolOkta
+  #     AccessTokenValidity: 5
+  #     IdTokenValidity: 5
+  #     RefreshTokenValidity: 30
+  #     TokenValidityUnits:
+  #       RefreshToken: "days"
+  #       AccessToken: "minutes"
+  #       IdToken: "minutes"
+  #     ExplicitAuthFlows:
+  #       - ALLOW_CUSTOM_AUTH
+  #       - ALLOW_USER_PASSWORD_AUTH
+  #       - ALLOW_ADMIN_USER_PASSWORD_AUTH
+  #       - ALLOW_REFRESH_TOKEN_AUTH
+  #       - ALLOW_USER_SRP_AUTH
+  #     PreventUserExistenceErrors: ENABLED
+  #     EnableTokenRevocation: True
+  #     SupportedIdentityProviders:
+  #       - Okta
+  #     AllowedOAuthScopes:
+  #       - email
+  #       - openid
+  #       - profile
+  #     AllowedOAuthFlowsUserPoolClient: true
+  #     CallbackURLs:
+  #       - https://api.mycv.ltd
+  #       - http://localhost:3000
+  #     LogoutURLs:
+  #       - https://api.mycv.ltd
+  #       - http://localhost:3000
+  #     AllowedOAuthFlows:
+  #       - code 
+  # TtcvpayOktausersPoolDomain:
+  #   Type: AWS::Cognito::UserPoolDomain
+  #   Properties:
+  #     Domain: "ttcvpay-dev"
+  #     UserPoolId: !Ref TtcvpayUsersPoolOkta
+  # TtcvpayOktaIdentityPool:
+  #   Type: "AWS::Cognito::IdentityPool"
+  #   Properties:
+  #     IdentityPoolName: "ttcvpay-okta"
+  #     AllowUnauthenticatedIdentities: false
+  #     CognitoIdentityProviders:
+  #       - ClientId: !Ref TtcvpayOktausersPoolClient
+  #         ProviderName: !GetAtt TtcvpayUsersPoolOkta.ProviderName
+  # TtcvpayIdentityPoolRoleMapping:
+  #   Type: "AWS::Cognito::IdentityPoolRoleAttachment"
+  #   Properties:
+  #     IdentityPoolId: !Ref TtcvpayOktaIdentityPool
+  #     Roles:
+  #       authenticated: !GetAtt ttcvpayOktaCognitoAuthorizedRole.Arn
+  #       unauthenticated: !GetAtt ttcvpayOktaCognitoUnAuthorizedRole.Arn
+  # ttcvpayOktaCognitoUnAuthorizedRole:
+  #   DependsOn: TtcvpayIdentityPool
+  #   Type: "AWS::IAM::Role"
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #         - Effect: "Allow"
+  #           Principal:
+  #             Federated: "cognito-identity.amazonaws.com"
+  #           Action: 
+  #             - "sts:AssumeRoleWithWebIdentity"
+  #           Condition:
+  #             StringEquals:
+  #               "cognito-identity.amazonaws.com:aud": !Ref TtcvpayOktaIdentityPool
+  #             "ForAnyValue:StringLike":
+  #               "cognito-identity.amazonaws.com:amr": unauthenticated
+  #     Policies:
+  #       - PolicyName: "ttcvpayCognitoUnauthorizedPolicy"
+  #         PolicyDocument:
+  #           Version: "2012-10-17"
+  #           Statement: 
+  #             - Effect: "Allow"
+  #               Action:
+  #                 - "mobileanalytics:PutEvents"
+  #                 - "cognito-sync:*"
+  #               Resource: "*"
+  # ttcvpayOktaCognitoAuthorizedRole:
+  #   DependsOn: TtcvpayIdentityPool
+  #   Type: "AWS::IAM::Role"
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #         - Effect: "Allow"
+  #           Principal: 
+  #             Federated: "cognito-identity.amazonaws.com"
+  #           Action: 
+  #             - "sts:AssumeRoleWithWebIdentity"
+  #           Condition:
+  #             StringEquals:
+  #               "cognito-identity.amazonaws.com:aud": !Ref TtcvpayOktaIdentityPool
+  #             "ForAnyValue:StringLike":
+  #               "cognito-identity.amazonaws.com:amr": authenticated
+  #     Policies:
+  #       - PolicyName: "ttcvpayCognitoAuthorizedPolicy"
+  #         PolicyDocument: 
+  #           Version: "2012-10-17"
+  #           Statement: 
+  #             - Effect: "Allow"
+  #               Action:
+  #                 - "mobileanalytics:PutEvents"
+  #                 - "cognito-sync:*"
+  #                 - "cognito-identity:*"
+  #               Resource: "*"
+  #             - Effect: "Allow"
+  #               Action: ["s3:ListBucket",
+  #                 "s3:PutObject",
+  #                 "s3:GetObject",
+  #                 "s3:PutObjectTagging",
+  #                 "s3:DeleteObject"]
+  #               Resource: ["arn:aws:s3:::ttcvpay-webapp-landing-uat",
+  #                 "arn:aws:s3:::ttcvpay-webapp-landing-uat/*",
+  #                 "arn:aws:s3:::ttcvpay-client-data-uat",
+  #                 "arn:aws:s3:::ttcvpay-client-data-uat/*",
+  #                 "arn:aws:s3:::ttcvpay-webapp-staging-uat",
+  #                 "arn:aws:s3:::ttcvpay-webapp-staging-uat/*"]
+  # TtcvpayUserPoolClient:
+  #   Type: "AWS::Cognito::UserPoolClient"
+  #   Properties:
+  #     ClientName: "Ttcclwebapp"
+  #     AccessTokenValidity: 5
+  #     IdTokenValidity: 5
+  #     RefreshTokenValidity: 30
+  #     TokenValidityUnits:
+  #       RefreshToken: "days"
+  #       AccessToken: "minutes"
+  #       IdToken: "minutes"
+  #     GenerateSecret: false
+  #     UserPoolId: !Ref TtcvpayUsersPool
+  #     ExplicitAuthFlows: ["ADMIN_NO_SRP_AUTH","USER_PASSWORD_AUTH"]
+  #     PreventUserExistenceErrors: ENABLED
+  # TtcvpayIdentityPool:
+  #   Type: "AWS::Cognito::IdentityPool"
+  #   Properties:
+  #     IdentityPoolName: "ttcvpay_Identity"
+  #     AllowUnauthenticatedIdentities: false
+  #     CognitoIdentityProviders: 
+  #       - ClientId: !Ref TtcvpayUserPoolClient
+  #         ProviderName: !GetAtt TtcvpayUsersPool.ProviderName
+  # ttcvpayCognitoUnAuthorizedRole:
+  #   DependsOn: TtcvpayIdentityPool
+  #   Type: "AWS::IAM::Role"
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #         - Effect: "Allow"
+  #           Principal: 
+  #             Federated: "cognito-identity.amazonaws.com"
+  #           Action: 
+  #             - "sts:AssumeRoleWithWebIdentity"
+  #           Condition:
+  #             StringEquals:
+  #               "cognito-identity.amazonaws.com:aud": !Ref TtcvpayIdentityPool
+  #             "ForAnyValue:StringLike":
+  #               "cognito-identity.amazonaws.com:amr": unauthenticated
+  #     Policies:
+  #       - PolicyName: "ttcvpayCognitoUnauthorizedPolicy"
+  #         PolicyDocument:
+  #           Version: "2012-10-17"
+  #           Statement:
+  #             - Effect: "Allow"
+  #               Action:
+  #                 - "mobileanalytics:PutEvents"
+  #                 - "cognito-sync:*"
+  #               Resource: "*"
+  # ttcvpayCognitoAuthorizedRole:
+  #   DependsOn: TtcvpayIdentityPool
+  #   Type: "AWS::IAM::Role"
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #         - Effect: "Allow"
+  #           Principal:
+  #             Federated: "cognito-identity.amazonaws.com"
+  #           Action: 
+  #             - "sts:AssumeRoleWithWebIdentity"
+  #           Condition:
+  #             StringEquals:
+  #               "cognito-identity.amazonaws.com:aud": !Ref TtcvpayIdentityPool
+  #             "ForAnyValue:StringLike":
+  #               "cognito-identity.amazonaws.com:amr": authenticated
+  #     Policies:
+  #       - PolicyName: "ttcvpayCognitoAuthorizedPolicy"
+  #         PolicyDocument:
+  #           Version: "2012-10-17"
+  #           Statement: 
+  #             - Effect: "Allow"
+  #               Action:
+  #                 - "mobileanalytics:PutEvents"
+  #                 - "cognito-sync:*"
+  #                 - "cognito-identity:*"
+  #               Resource: "*"
+  #             - Effect: "Allow"
+  #               Action: ["s3:ListBucket",
+  #                 "s3:PutObject",
+  #                 "s3:GetObject",
+  #                 "s3:PutObjectTagging",
+  #                 "s3:DeleteObject"]
+  #               Resource: ["arn:aws:s3:::ttcvpay-webapp-landing-uat",
+  #                 "arn:aws:s3:::ttcvpay-webapp-landing-uat/*",
+  #                 "arn:aws:s3:::ttcvpay-client-data-uat",
+  #                 "arn:aws:s3:::ttcvpay-client-data-uat/*",
+  #                 "arn:aws:s3:::ttcvpay-webapp-staging-uat",
+  #                 "arn:aws:s3:::ttcvpay-webapp-staging-uat/*"]
+
+  TtcvpayclientdetailsTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "company"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "company"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      TableName: "client_detail"
+      # PointInTimeRecoverySpecification:
+      #   PointInTimeRecoveryEnabled: True
+  TtcvpayvendorsTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "company"
+          AttributeType: "S"
+        - 
+          AttributeName: "ein"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "company"
+          KeyType: "HASH"
+        - 
+          AttributeName: "ein"
+          KeyType: "RANGE"
+      BillingMode: "PAY_PER_REQUEST"
+      TableName: "vendors"
+      # PointInTimeRecoverySpecification:
+      #   PointInTimeRecoveryEnabled: True
+  TtcVpayStaticcontent:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "PK"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "PK"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      TableName: "ttc_vpay_staticcontent"
+  TtcvpayCountriesAndStatesLkp:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "country"
+          AttributeType: "S"
+        - 
+          AttributeName: "state"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "country"
+          KeyType: "HASH"
+        - 
+          AttributeName: "state"
+          KeyType: "RANGE"
+      BillingMode: "PAY_PER_REQUEST"
+      TableName: "ttc_vpay_countries_and_states_lkp"
+      # PointInTimeRecoverySpecification:
+      #   PointInTimeRecoveryEnabled: True
+  TtcVpayCache:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "id_token"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "id_token"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      TableName: "ttc_vpay_cache"
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+  TtcVpayVariable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "type"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "type"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      TableName: "ttc_vpay_variable"
+  ttcvpayCloudFrontOriginIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: 'access-identity-ttcvpay-webapp-uat'
+  ttcvpayBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: 'raju-webapp-uat'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${ttcvpayCloudFrontOriginIdentity}'
+            Action: 's3:GetObject'
+            Resource: 'arn:aws:s3:::raju-webapp-uat/*'
+  ttcvpaycloudfronfunction:
+    DependsOn: ttcvpayBucketPolicy
+    Type: AWS::CloudFront::Function
+    Properties:
+      AutoPublish: True
+      FunctionCode: !Sub | 
+                function handler(event) {
+                var response = event.response;
+                var headers = response.headers;
+                console.log(event)
+                // Set HTTP security headers
+                // Since JavaScript doesn't allow for hyphens in variable names, we use the dict["key"] notation 
+                headers['x-frame-options'] = {value: 'DENY'}; 
+                console.log(response)
+                // Return the response to viewers 
+                return response; }
+      Name: "security-headers-uat"
+      FunctionConfig:
+        Runtime: "cloudfront-js-1.0"
+        Comment: "security-headers"
+  ttcvpaycloudfrontResponseHeaderPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: security_response_header
+        Comment: security_response_header
+        SecurityHeadersConfig:
+          ContentSecurityPolicy:
+            ContentSecurityPolicy: "default-src 'self'; connect-src https://*.mycv.ltd"
+            Override: true
+          ContentTypeOptions: # You don't need to specify a value for 'X-Content-Type-Options'.
+                              # Simply including it in the template sets its value to 'nosniff'.
+            Override: true
+          FrameOptions:
+            FrameOption: DENY
+            Override: true
+          ReferrerPolicy:
+            ReferrerPolicy: same-origin
+            Override: true
+          StrictTransportSecurity:
+            AccessControlMaxAgeSec: 31536000
+            IncludeSubdomains: true
+            Preload: true
+            Override: true
+  # ttcvpaypublicDistribution:
+  #   DependsOn: ttcvpaycloudfronfunction
+  #   Type: AWS::CloudFront::Distribution
+  #   Properties:
+  #     # FunctionAssociation:
+  #     #   - EventType: "origin-request"
+  #     #     IncludeBody: False
+  #     #     LambdaFunctionARN: "arn:aws:lambda:us-east-1:975050217954:function:ttc_security_headers:1"
+  #     #   - EventType: "viewer-response"
+  #     #     IncludeBody: False
+  #     #     LambdaFunctionARN: "arn:aws:cloudfront::975050217954:function/security-headers-uat"
+  #     DistributionConfig:
+  #       Origins:
+  #         - DomainName: 'ttcvpay-webapp-uat.s3.us-west-2.amazonaws.com'
+  #           Id: 'S3-ttcvpay-webapp-uat'
+  #           S3OriginConfig:
+  #             OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${ttcvpayCloudFrontOriginIdentity}'
+  #       Enabled: 'true'
+  #       Comment: 'ttcvpay uat WEBAPP'
+  #       DefaultCacheBehavior:
+  #         AllowedMethods:
+  #           - GET
+  #           - HEAD
+  #         TargetOriginId: 'S3-ttcvpay-webapp-uat'
+  #         ViewerProtocolPolicy: 'redirect-to-https'
+  #         # CachePolicyId: 'fb028f7a-71bd-4c68-a407-17ebffd99ebf'
+  #         CachePolicyId: '658327ea-f89d-4fab-a63d-7e88639e58f6'
+  #         ResponseHeadersPolicyId: !Ref ttcvpaycloudfrontResponseHeaderPolicy
+  #         FunctionAssociations:
+  #           - EventType: "viewer-response"
+  #             FunctionARN: !GetAtt ttcvpaycloudfronfunction.FunctionMetadata.FunctionARN
+  #         LambdaFunctionAssociations:
+  #           - EventType: "origin-request"
+  #             IncludeBody: False
+  #             LambdaFunctionARN: "arn:aws:lambda:us-east-1:975050217954:function:ttc_security_headers:1"
+  #       DefaultRootObject: "index.html"
+  #       HttpVersion: http2
+  #       Aliases: ["uat-app.ttcvpay.com"]
+  #       ViewerCertificate:
+  #         AcmCertificateArn: 'arn:aws:acm:us-east-1:975050217954:certificate/fb028f7a-71bd-4c68-a407-17ebffd99ebf'
+  #         SslSupportMethod: 'sni-only'
+  #         MinimumProtocolVersion: 'TLSv1.2_2019'
+  # ttcvpayparameterstore:
+  #   Type: AWS::SSM::Parameter
+  #   Properties: 
+  #     Name: "db_hostname"
+  #     Tier: "Standard"
+  #     Type: "String"
+  #     Value: "ttcvpay-uat.cejzn6s4vww9.us-west-2.rds.amazonaws.com"
+
+
+# Outputs:
+#   TtcvpayUsersPoolId:
+#     Value: !Ref TtcvpayUsersPool
+#     Export:
+#       Name: "TtcvpayUsersPool::Id"
+#   TtcvpayUserPoolClientId:
+#     Value: !Ref TtcvpayUserPoolClient
+#     Export:
+#       Name: "TtcvpayUserPoolClient::Id"
+#   TtcvpayWebappLandingBucketARN:
+#     Value: !GetAtt TtcvpayWebappLandingBucket.Arn
+#   TtcVpayUsersPoolIdARN:
+#     Value: !GetAtt TtcvpayUsersPool.Arn
+#     Export:
+#       Name: "TtcVpayUsersPoolIdARN::Id"
+#   Domainname:
+#     Description: 'TTCVpay Cloudfront Domain'
+#     Value: !GetAtt ttcvpaypublicDistribution.DomainName
+#   TtcvpayUsersPoolOktaId:
+#     Value: !Ref TtcvpayUsersPoolOkta
+#     Export:
+#       Name: "TtcvpayUsersPoolOkta::Id"
+#   TtcVpayUsersPoolIdOktaARN:
+#     Value: !GetAtt TtcvpayUsersPoolOkta.Arn
+#     Export:
+#       Name: "TtcvpayUsersPoolIdOktaARN::Id"
+
+
+
+
