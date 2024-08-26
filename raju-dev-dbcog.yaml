@@ -166,54 +166,51 @@ Resources:
         ErrorDocument: index.html
         IndexDocument: index.html
 
-  # TtcvpayUsersPool:
-  #   Type: 'AWS::Cognito::UserPool'
-  #   Properties:
-  #     UserPoolName: "raju"
-  #     AdminCreateUserConfig:
-  #       AllowAdminCreateUserOnly: "True"
-  #       #TemporaryPasswordValidityDays: "7"
-  #     EmailConfiguration:
-  #       EmailSendingAccount: "DEVELOPER"
-  #       SourceArn: arn:aws:ses:us-west-2:975050217954:identity/ttcvpay-dev@fugetroncorp.com
-  #     AccountRecoverySetting:
-  #       RecoveryMechanisms:
-  #         - Name: verified_email
-  #           Priority: 1
-  #     Schema:
-  #       - Name: given_name
-  #         AttributeDataType: String
-  #         Mutable: true
-  #         Required: true
-  #       - Name: email
-  #         AttributeDataType: String
-  #         Mutable: false
-  #         Required: true
-  #       - Name: family_name
-  #         AttributeDataType: String
-  #         Mutable: true
-  #         Required: true
-  #       - Name: company_name
-  #         AttributeDataType: String
-  #         Mutable: true
-  #       - Name: user_type
-  #         AttributeDataType: String
-  #         Mutable: true
-  #     Policies:
-  #       PasswordPolicy: 
-  #         MinimumLength: 12
-  #         RequireLowercase: True
-  #         RequireNumbers: True
-  #         RequireUppercase: True
-  #         RequireSymbols: True
-  #     UsernameAttributes: 
-  #       - "email"
-  #     UsernameConfiguration:
-  #       CaseSensitive : False
-  #     LambdaConfig:
-  #       CustomMessage: arn:aws:lambda:us-west-2:975050217954:function:ttc_vpay_welcome_email
-  #       PreAuthentication: arn:aws:lambda:us-west-2:975050217954:function:ttc_vpay_lock_unlock_user
-  #       PostAuthentication: arn:aws:lambda:us-west-2:975050217954:function:ttc_vpay_lock_unlock_user
+  TtcvpayUsersPool:
+    Type: 'AWS::Cognito::UserPool'
+    Properties:
+      UserPoolName: "raju"
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: "True"
+        #TemporaryPasswordValidityDays: "7"
+      EmailConfiguration:
+        EmailSendingAccount: "DEVELOPER"
+        SourceArn: arn:aws:ses:ap-south-1:975050217954:identity/pinnampadmaraju@gmail.com
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      Schema:
+        - Name: given_name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: email
+          AttributeDataType: String
+          Mutable: false
+          Required: true
+        - Name: family_name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: company_name
+          AttributeDataType: String
+          Mutable: true
+        - Name: user_type
+          AttributeDataType: String
+          Mutable: true
+      Policies:
+        PasswordPolicy: 
+          MinimumLength: 12
+          RequireLowercase: True
+          RequireNumbers: True
+          RequireUppercase: True
+          RequireSymbols: True
+      UsernameAttributes: 
+        - "email"
+      UsernameConfiguration:
+        CaseSensitive : False
+
   # TtcvpayUsersPoolOkta:
   #   Type: 'AWS::Cognito::UserPool'
   #   Properties:
